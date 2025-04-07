@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:80"  # Map localhost port 8080 to container's port 80
+    volumes:
+      - ./html:/var/www/html             # Mount html directory for Nginx to serve
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf  # Use your custom Nginx config
+    depends_on:
+      - php   # Ensure PHP container is ready before Nginx starts
+
+  php:
+    build:
+      context: .             # Use the current directory (where Dockerfile is)
+      dockerfile: Dockerfile # Specify the Dockerfile to build the image
+    volumes:
+      - ./html:/var/www/html  # Mount html directory for PHP-FPM to access
